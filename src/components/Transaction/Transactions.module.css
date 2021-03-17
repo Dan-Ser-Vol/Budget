@@ -1,0 +1,15 @@
+
+.transaction {
+    border: #6262ba 2px solid;
+    background: #75e247;
+    border-radius: 3px;
+    padding: 5px;
+    margin-bottom: 6px;
+}
+.dangerTrans  {
+    border: #0e0d0d 2px solid;
+    background: #e2475e;
+    border-radius: 3px;
+    padding: 5px;
+    margin-bottom: 6px;
+}
