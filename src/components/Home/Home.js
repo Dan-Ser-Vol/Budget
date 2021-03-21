@@ -1,51 +1,52 @@
-import {Component} from 'react'
+import {useEffect, useState} from 'react'
 import Balance from "../Balance/Balance";
 import {Wrapper} from "../App/style";
 import Forms from "../Forms/Forms";
 import TransactionsMap from "../TransactionsMap/TransactionsMap";
+import {addItem, getItems} from "../../utils/indexdb";
 
-let id = 0
 
-class Home extends Component {
-    constructor(props) {
-        console.log('constructor')
-        super(props);
-        this.state = {
-            balance: 0,
-            transactions: [],
+const Home = () => {
+    const [balance, setBalance] = useState(0)
+    const [transactions, setTransactions] = useState([])
 
+
+    useEffect(() => {
+        getItems().then((item) => {
+            setTransactions(item)
+        }).catch((e) => {
+        })
+    }, [setTransactions])
+
+
+    const onChange = ({value, date, comment}) => {
+        const transaction = {
+            value: +value,
+            comment,
+            date,
+            id: Date.now()
         }
-        this.onChange = this.onChange.bind(this)
+        setTransactions([
+            transaction,
+            ...transactions
+        ])
+        setBalance(balance + Number(value))
+        addItem(transaction)
     }
 
-    onChange = (value) => {
-        this.setState((state) => ({
-            balance: state.balance + Number(value),
-            transactions: [{
-                value,
-                label: 'change',
-                id: ++id
-            }, ...state.transactions]
-        }))
-    }
+    return (
+        <Wrapper>
+            <Balance balance={balance}
+                     transactions={transactions}>
+            </Balance>
+            <hr/>
+            <Forms onChange={onChange}/>
+            <br/>
+            <TransactionsMap transactions={transactions}/>
 
+        </Wrapper>
 
-    render() {
-        console.log('render')
-        return (
-            <Wrapper>
-                <Balance balance={this.state.balance}
-                         transactions={this.state.transactions}>
-                </Balance>
-                <hr/>
-                <Forms onChange={this.onChange}/>
-                <br/>
-                <TransactionsMap transactions={this.state.transactions}/>
-
-            </Wrapper>
-
-        )
-    }
+    )
 
 }
 

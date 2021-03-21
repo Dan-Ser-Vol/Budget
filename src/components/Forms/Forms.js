@@ -1,61 +1,63 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
+import {Button, Comment, Input, Row, Wrapper} from "./FormsStyle";
 
-class Forms extends React.Component {
-    constructor(props) {
-        super(props);
+const Forms = (props) => {
+    const [form, setForms] = useState({
+        value: '',
+        date: new Date().toISOString().substring(0, 10),
+        comment: ''
+    })
 
-        this.state = {
-            value: '',
-            date: '',
-            comment: ''
-        }
-    }
 
-    onSubmit = (e) => {
+    const onSubmit = (e) => {
         e.preventDefault()
-        this.props.onChange(this.state.value)
-        {
-            this.setState({
+            props.onChange(form)
+
+            setForms({
+                ...form,
                 value: '',
-                date: '',
                 comment: ''
             })
-        }
+
     }
 
-    onChange = (e) => {
+    const onChange = (e) => {
         const {value, name} = e.target
-        this.setState({
-           [name]: value === 'balance' ? +value : value
+        setForms({
+            ...form,
+            [name]: value
         })
     }
 
-    render() {
-        return (
-            <div>
-                <form onSubmit={this.onSubmit}>
-                    <input type="date"
+
+    return (
+        <Wrapper>
+            <form onSubmit={onSubmit}>
+                <Row>
+                    <Input type="date"
                            name='date'
-                           value={this.state.date}
-                           onChange={this.onChange}
+                           value={form.date}
+                           onChange={onChange}
                     />
-                    <input type='number'
-                           value={this.state.value}
+                    <Input type='number'
+                           value={form.value}
                            name='value'
                            placeholder='Сума'
-                           onChange={this.onChange}
+                           onChange={onChange}
                     />
-                    <textarea name="comment"
-                              value={this.state.comment}
-                              onChange={this.onChange}
+                </Row>
+                <Row>
+                    <Comment name="comment"
+                             value={form.comment}
+                             onChange={onChange}
                     />
-                    <hr/>
-                    <button>Submit</button>
-                </form>
-            </div>
-        );
-    }
+                    <Button>Зберегти</Button>
+                </Row>
+            </form>
+        </Wrapper>
+    );
+
 }
 
 Forms.propTypes = {

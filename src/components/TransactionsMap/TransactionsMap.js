@@ -5,13 +5,12 @@ import PropTypes from 'prop-types';
 const TransactionsMap = (props) => {
     return (
         <div>
-            {props.transactions.map((transactions) => <Transaction key={transactions.id}
-                                                                   transactions={transactions}
+            {props.transactions.map((transactions) => <Transaction
+                transactions={transactions}
             />)}
         </div>
     );
 };
-
 
 
 TransactionsMap.propTypes = {
